@@ -18,7 +18,7 @@ def main():
     all_monetary_account_bank_active = bunq.get_all_monetary_account_active(1)
     ShareLib.print_all_monetary_account_bank(all_monetary_account_bank_active)
 
-    all_payment = bunq.get_all_payment(1)
+    all_payment = bunq.get_all_payment(10)
     ShareLib.print_all_payment(all_payment)
 
     all_request = bunq.get_all_request(1)
