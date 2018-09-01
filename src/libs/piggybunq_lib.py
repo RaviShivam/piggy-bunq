@@ -2,8 +2,8 @@ import csv
 import json
 from datetime import datetime
 
-from src.libs.bunq_lib import BunqLib
-from src.libs.share_lib import ShareLib
+from libs.bunq_lib import BunqLib
+from libs.share_lib import ShareLib
 
 
 def parse_user_discounts(file):
