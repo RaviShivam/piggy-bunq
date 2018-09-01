@@ -12,20 +12,23 @@ def refresh_database(bunq, discounts):
     database = DbHelper()
     existing_tx = [tranx[0] for tranx in database.get_payments_from_database()]
     history = bunq.get_all_payment(count=200)
-    for h in history:
-        if h.description.split("-")[0] != "CASHBACK":
-            _, dsc = determine_discount(h.description, discounts)
-            database.add_payment_to_database(h.id_, h.description, h.amount.value, dsc*h.amount.value)
-            existing_tx.append(h.id_)
+    # for h in history:
+    #     if h.description.split("-")[0] != "CASHBACK":
+    #         _, dsc = determine_discount(h.description, discounts)
+    #         database.add_payment_to_database(h.id_, h.description, h.amount.value, dsc*h.amount.value)
+    #         existing_tx.append(h.id_)
 
     while True:
         new_payments = bunq.get_all_payment(5)
         for np in new_payments:
-            if np.id_ not in existing_tx and np.description.split("-")[0] != "CASHBACK":
-                shop , dsc = determine_discount(np.description, discounts)
+            if str(np.id_) not in existing_tx and np.description.split("-")[0] != "CASHBACK":
+                shop, dsc = determine_discount(np.description, discounts)
                 database.add_payment_to_database(np.id_, np.description, np.amount.value, dsc*np.amount.value)
-                existing_tx.append(np.id_)
-                bunq.make_request(dsc, "-".join("CASHBACK", shop, dsc), "sugardaddy@bunq.com")
+                existing_tx.append(str(np.id_))
+                if shop is not None:
+                    desc = "{}-{}-{}".format("CASHBACK", shop, dsc)
+                    print(desc)
+                    bunq.make_request(dsc, desc, "sugardaddy@bunq.com")
         time.sleep(3)
 
 
