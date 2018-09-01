@@ -3,7 +3,7 @@ from libs.bunq_lib import BunqLib
 from libs.share_lib import ShareLib
 import csv
 import random
-
+import time
 
 def import_shops_csv():
     shops = []
@@ -35,11 +35,13 @@ def main():
     bunq = BunqLib(environment_type)
 
 
-    amount, description, geolocation = generate_random_entry()
-    print(amount, description, geolocation)
-    recipient = "griffin.courtland@bunq.nl"
+    for i in range(10):
+        amount, description, geolocation = generate_random_entry()
+        print(amount, description, geolocation)
+        recipient = "griffin.courtland@bunq.nl"
 
-    bunq.make_payment(str(amount), description, recipient, geolocation=geolocation)
+        bunq.make_payment(str(amount), description, recipient, geolocation=geolocation)
+        time.sleep(1)
 
 if __name__ == "__main__":
     main()
