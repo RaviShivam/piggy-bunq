@@ -19,11 +19,6 @@ def hello_world():
     return 'Hello World!'
 
 
-@socketio.on('my event')
-def handle_my_custom_event(data):
-    emit('my response', data, broadcast=True)
-
-
 @app.route('/discounts')
 def get_discounts():
     return jsonify({
@@ -61,9 +56,9 @@ def refresh_database(bunq, discounts):
                     desc = "{}-{}-{}".format("CASHBACK", shop, dsc)
                     print(desc)
                     bunq.make_request(dsc, desc, "sugardaddy@bunq.com")
+                socketio.emit('NewPayment', {'shop': { 'name': 'shopName', 'current_points': 123, 'level': 99 }})
         time.sleep(3)
-        print("socket emit")
-        socketio.emit('NewPayment', {'number': 10}, namespace='/test')
+        
 
 
 def main():
@@ -95,7 +90,8 @@ def main():
     #
     # bunq.update_context()
 
-    app.run(debug=True)
+    socketio.run(app, debug=True, port=5000)
+    # app.run(debug=True)
 
 if __name__ == '__main__':
     main()
