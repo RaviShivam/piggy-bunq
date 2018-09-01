@@ -1,9 +1,9 @@
-shop,discountcategory,discount (%)
-Slijterij Loyaal,Alcohol,5
-Vomar,Alcohol,8
-Kwekkeboom,Coffee,10
-Hunters Coffeeshop,Coffee,20
-LIDL,Grocery,5
-GOG,Gaming,5
-Endam,Clothing,10
-HEMA,Clothing,5
+shop,discountcategory,discount (%),validFrom,validTo,count
+Slijterij Loyaal,Alcohol,5,30-10-2018,20-11-2018,10
+Vomar,Alcohol,8,20-10-2018,10-11-2018,5
+Kwekkeboom,Coffee,10,30-10-2018,5-11-2018,2
+Hunters Coffeeshop,Coffee,20,20-10-2018,5-11-2018,5
+LIDL,Grocery,5,20-10-2018,20-11-2018,10
+GOG,Gaming,5,20-10-2018,10-11-2018,5
+Endam,Clothing,10,30-10-2018,5-11-2018,5
+HEMA,Clothing,5,30-10-2018,20-11-2018,10
