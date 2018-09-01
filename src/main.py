@@ -79,7 +79,7 @@ def refresh_database(bunq, user):
                         print(i, discount)
                         if discount['shop'] == shop:
                             level_before = get_level(discounts[i])
-                            discounts[i]['current_points'] += int(dsc * -1 * float(npy.amount.value)) * 10
+                            user['discounts'][i]['current_points'] += int(dsc * -1 * float(npy.amount.value)) * 10
                             level_after = get_level(discounts[i])
 
                             if level_before != level_after:
