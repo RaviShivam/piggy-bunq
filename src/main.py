@@ -16,8 +16,7 @@ def refresh_database(bunq, discounts):
         for np in new_payments:
             if np.id_ not in existing_tx and np.description.split("-")[0] != "CASHBACK":
                 _, dsc = determine_discount(np.description, discounts)
-                database.add_payment_to_database(np.id_, np.description, np.amount.value,
-                                                 np._alias.label_monetary_account.display_name, dsc)
+                database.add_payment_to_database(np.id_, np.description, np.amount.value, dsc)
                 pass
         time.sleep(3)
 
