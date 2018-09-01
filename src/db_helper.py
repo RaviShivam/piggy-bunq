@@ -19,7 +19,6 @@ class DbHelper():
     def get_payments_discounts_columns():
         return [["payment_id_", "TEXT"],
                 ["payment_description", "TEXT"],
-                ["payment_amount_currency", "TEXT"],
                 ["payment_amount_value", "TEXT"],
                 ["discount_applied_value", "TEXT"]]
 
@@ -41,7 +40,6 @@ class DbHelper():
 
     def add_payment_to_database(self, payment_id_,
                                 payment_description,
-                                payment_amount_currency,
                                 payment_amount_value,
                                 discount_applied_value):
         query = "INSERT INTO " + self.payments_discounts_table + " ( "
@@ -54,11 +52,9 @@ class DbHelper():
         query += ") VALUES (" \
                  "'{payment_id_}' , " \
                  "'{payment_description}' , " \
-                 "'{payment_amount_currency}' , " \
                  "'{payment_amount_value}' , " \
                  "'{discount_applied_value}');".format(payment_id_=payment_id_,
                                                        payment_description=payment_description,
-                                                       payment_amount_currency=payment_amount_currency,
                                                        payment_amount_value=payment_amount_value,
                                                        discount_applied_value=discount_applied_value)
         print("Executing " + query)

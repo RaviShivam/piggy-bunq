@@ -29,7 +29,8 @@ def determine_discount(description, discounts):
     """
     currentdate = datetime.now()
     for d in discounts:
-        if description == d["shop"] and currentdate > datetime.strftime(d['validFrom'], "%d-%m-%Y") and d["count"] > 0:
+        # print(d["validFrom"], datetime.strftime(d['validFrom'], "%d-%m-%Y") )
+        if description == d["shop"] and currentdate > datetime.strptime(d['validFrom'], "%d-%m-%Y") and d["count"] > 0:
             return d['shop'], d['discount']
     return None, 0
 

@@ -1,10 +1,32 @@
 #!/usr/bin/env .venv/bin/python -W ignore
 from libs.bunq_lib import BunqLib
 from libs.share_lib import ShareLib
-from libs.piggybunq_lib import userhistory_to_json
-from bunq.sdk.context import ApiEnvironmentType
+from db_helper import DbHelper
+from threading import Thread
+import time
 
-from src.libs.piggybunq_lib import parse_user_discounts
+from src.libs.piggybunq_lib import parse_user_discounts, determine_discount
+
+
+def refresh_database(bunq, discounts):
+    database = DbHelper()
+    existing_tx = [tranx[0] for tranx in database.get_payments_from_database()]
+    history = bunq.get_all_payment(count=200)
+    for h in history:
+        if h.description.split("-")[0] != "CASHBACK":
+            _, dsc = determine_discount(h.description, discounts)
+            database.add_payment_to_database(h.id_, h.description, h.amount.value, dsc*h.amount.value)
+            existing_tx.append(h.id_)
+
+    while True:
+        new_payments = bunq.get_all_payment(5)
+        for np in new_payments:
+            if np.id_ not in existing_tx and np.description.split("-")[0] != "CASHBACK":
+                shop , dsc = determine_discount(np.description, discounts)
+                database.add_payment_to_database(np.id_, np.description, np.amount.value, dsc*np.amount.value)
+                existing_tx.append(np.id_)
+                bunq.make_request(dsc, "-".join("CASHBACK", shop, dsc), "sugardaddy@bunq.com")
+        time.sleep(3)
 
 
 def main():
@@ -16,15 +38,14 @@ def main():
     bunq = BunqLib(environment_type)
 
     user = bunq.get_current_user()
-    ShareLib.print_user(user)
 
-    all_monetary_account_bank_active = bunq.get_all_monetary_account_active(1)
-    ShareLib.print_all_monetary_account_bank(all_monetary_account_bank_active)
+    discounts = parse_user_discounts("data/discount.csv")
 
-    all_payment = bunq.get_all_payment(10)
-    # ShareLib.print_all_payment(all_payment)
-    # = parse(user)
-    print(parse_user_discounts("data/discount.csv"))
+    database = DbHelper()
+
+
+
+    Thread(target=refresh_database, args=(bunq, discounts)).start()
 
     # all_request = bunq.get_all_request(1)
     # ShareLib.print_all_request(all_request)
