@@ -26,26 +26,19 @@ class UserDiscounts:
                     ],
                     "loot_discounts": [{
                         "type": "FIRST_PAYMENT_DISCOUNT",
-                        "value": 0.5
-                    }],
-                    "basic_discount": {
-                        "value": 0.3,
+                        "value": 0.5,
                         "valid_from": "02-08-2018",
-                        "valid_to": "18-08-2018"
-                    },
+                        "valid_to": "18-08-2018",
+                    }],
                     "current_points": 0
                 }, {
                     "shop": "Kwekkeboom",
                     "discount_policy": [
                         (0, 20, 0.05),
                         (21, 100, 0.1),
-                        (100, 200, 0.15)
+                        (100, 200, 0.15),
                     ],
-                    "basic_discount": {
-                        "value": 0.28,
-                        "valid_from": "15-08-2018",
-                        "valid_to": "20-08-2018"
-                    },
+                    "loot_discounts": [],
                     "current_points": 25
                 }, {
                     "shop": "Game Mania",
@@ -56,7 +49,9 @@ class UserDiscounts:
                     ],
                     "loot_discounts": [{
                         "type": "FIRST_PAYMENT_DISCOUNT",
-                        "value": 0.25
+                        "value": 0.25,
+                        "valid_from": "10-08-2018",
+                        "valid_to": "25-08-2018",
                     }],
                     "current_points": 95
                 }, {
@@ -67,15 +62,16 @@ class UserDiscounts:
                         (400, 800, 0.25)
                     ],
                     "loot_discounts": [{
-                        "type": "FIRST_PAYMENT_DISCOUNT",
-                        "value": 0.25
+                        "type": "DOUBLE_YOUR_POINTS",
+                        "value": 0,
+                        "valid_from": "15-08-2018",
+                        "valid_to": "30-08-2018",
                     }],
                     "current_points": 95
                 }
 
             ]
         }
-
         with open(self.discount_policy_file, 'w') as outfile:
             json.dump(dummy_policy_obj, outfile)
 

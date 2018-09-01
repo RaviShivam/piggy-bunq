@@ -20,7 +20,7 @@ def parse_user_discounts(file):
     return discounts
 
 
-def determine_discount(description, discounts):
+def determine_discount(description, user):
     """
     Determine whether a particular (not yet conducted) payment is eligible for a discount
     - Description has to match the shop name
@@ -28,10 +28,19 @@ def determine_discount(description, discounts):
     - counts left should be more than 0
     """
     currentdate = datetime.now()
-    for d in discounts:
-        # print(d["validFrom"], datetime.strftime(d['validFrom'], "%d-%m-%Y") )
-        if description == d["shop"] and currentdate > datetime.strptime(d['validFrom'], "%d-%m-%Y") and d["count"] > 0:
-            return d['shop'], d['discount']
+    for d in user['discounts']:
+        if description == d['shop']:
+            print(d)
+            if d['loot_discounts']:
+                dsc_item = d['loot_discounts'].pop(0)
+                is_valid = currentdate > datetime.strptime(dsc_item['valid_from'], "%d-%m-%Y")
+                if is_valid:
+                    # if dsc_item['type'] == "FIRST_PAYMENT_DISCOUNT":
+                    return d['shop'], dsc_item['value']
+            else:
+                for r in d['discount_policy']:
+                    if r[0] <= d["current_points"] <= r[1]:
+                        return d['shop'], r[2]
     return None, 0
 
 

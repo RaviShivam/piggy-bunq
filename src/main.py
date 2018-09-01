@@ -10,6 +10,8 @@ from libs.piggybunq_lib import parse_user_discounts, determine_discount
 from flask import Flask, jsonify
 from flask_socketio import SocketIO, emit
 
+from discount_policy import UserDiscounts
+
 app = Flask(__name__)
 socketio = SocketIO(app)
 
@@ -35,10 +37,13 @@ def get_payments():
     })
 
 
-def refresh_database(bunq, discounts):
+def refresh_database(bunq, user):
+    discounts = user['discounts']
     database = DbHelper()
     existing_tx = [tranx[0] for tranx in database.get_payments_from_database()]
-    history = bunq.get_all_payment(count=200)
+
+    #### FIRST TIME DATABASE INITIALIZATION ######
+    # history = bunq.get_all_payment(count=200)
     # for h in history:
     #     if h.description.split("-")[0] != "CASHBACK":
     #         _, dsc = determine_discount(h.description, discounts)
@@ -47,24 +52,41 @@ def refresh_database(bunq, discounts):
 
     while True:
         new_payments = bunq.get_all_payment(5)
-        for np in new_payments:
-            if str(np.id_) not in existing_tx and np.description.split("-")[0] != "CASHBACK":
-                shop, dsc = determine_discount(np.description, discounts)
-                database.add_payment_to_database(np.id_, np.description, np.amount.value, dsc * np.amount.value)
-                existing_tx.append(str(np.id_))
+        for npy in new_payments:
+            if str(npy.id_) not in existing_tx and npy.description.split("-")[0] != "CASHBACK":
+                # Check discount eligibility
+                shop, dsc = determine_discount(npy.description, user)
+                existing_tx.append(str(npy.id_))
+                # Add new payment to database
+                database.add_payment_to_database(
+                    npy.id_, npy.description, npy.amount.value, dsc * float(npy.amount.value))
+
                 if shop is not None:
+                    # Request cashback from sugar daddy
                     desc = "{}-{}-{}".format("CASHBACK", shop, dsc)
-                    print(desc)
                     bunq.make_request(dsc, desc, "sugardaddy@bunq.com")
-                socketio.emit('NewPayment', {'shop': { 'name': 'shopName', 'current_points': 123, 'level': 99 }})
+
+                    # Increase the points the shopper has
+                    for i, discount in enumerate(discounts):
+                        print(i, discount)
+                        if discount['shop'] == shop:
+                            discounts[i]['current_points'] += int(dsc * float(npy.amount.value))
+
+                    socketio.emit('NewPayment', {
+                        'shop': {
+                            'name': shop,
+                            'current_points': discounts[i]['current_points'],
+                        }
+                    })
+
         time.sleep(3)
-        
 
 
 def main():
 
     all_option = ShareLib.parse_all_option()
-    environment_type = ShareLib.determine_environment_type_from_all_option(all_option)
+    environment_type = ShareLib.determine_environment_type_from_all_option(
+        all_option)
 
     ShareLib.print_header()
 
@@ -72,7 +94,8 @@ def main():
 
     user = bunq.get_current_user()
 
-    discounts = parse_user_discounts("data/discount.csv")
+    user_discounts = UserDiscounts()
+    discounts = user_discounts.get_discounts()
 
     database = DbHelper()
 
@@ -92,6 +115,7 @@ def main():
 
     socketio.run(app, debug=True, port=5000)
     # app.run(debug=True)
+
 
 if __name__ == '__main__':
     main()

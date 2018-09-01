@@ -22,7 +22,7 @@ def generate_random_entry():
     shops = import_shops_csv()
     random_shop_name, random_shop_category = random.choice(shops)
     price = random.randint(10, 100)
-    return price, random_shop_name, "4.89 53.2 12 100 NL"
+    return price, 'Game Mania', "4.89 53.2 12 100 NL"
 
 
 
@@ -35,7 +35,7 @@ def main():
     bunq = BunqLib(environment_type)
 
 
-    for i in range(10):
+    for i in range(1):
         amount, description, geolocation = generate_random_entry()
         print(amount, description, geolocation)
         recipient = "griffin.courtland@bunq.nl"
