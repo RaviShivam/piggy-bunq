@@ -21,7 +21,6 @@ class DbHelper():
                 ["payment_description", "TEXT"],
                 ["payment_amount_currency", "TEXT"],
                 ["payment_amount_value", "TEXT"],
-                ["payment_counterparty_alias_label_monetary_account_display_name", "TEXT"],
                 ["discount_applied_value", "TEXT"]]
 
     def init_db(self):
@@ -44,7 +43,6 @@ class DbHelper():
                                 payment_description,
                                 payment_amount_currency,
                                 payment_amount_value,
-                                payment_counterparty_alias_label_monetary_account_display_name,
                                 discount_applied_value):
         query = "INSERT INTO " + self.payments_discounts_table + " ( "
         columns = self.get_payments_discounts_columns()
@@ -58,12 +56,10 @@ class DbHelper():
                  "'{payment_description}' , " \
                  "'{payment_amount_currency}' , " \
                  "'{payment_amount_value}' , " \
-                 "'{payment_counterparty_alias_label_monetary_account_display_name}' , " \
                  "'{discount_applied_value}');".format(payment_id_=payment_id_,
                                                        payment_description=payment_description,
                                                        payment_amount_currency=payment_amount_currency,
                                                        payment_amount_value=payment_amount_value,
-                                                       payment_counterparty_alias_label_monetary_account_display_name=payment_counterparty_alias_label_monetary_account_display_name,
                                                        discount_applied_value=discount_applied_value)
         print("Executing " + query)
 
@@ -93,5 +89,5 @@ class DbHelper():
 if __name__ == "__main__":
     db_helper = DbHelper()
 
-    db_helper.add_payment_to_database("1", "test", "eur", "20", "name", "")
+    db_helper.add_payment_to_database("1", "test", "eur", "20", "")
     print(db_helper.get_payments_from_database(2))
