@@ -137,18 +137,25 @@ class BunqLib(object):
 
         return endpoint.Card.list(pagination.url_params_count_only).value
 
-    def make_payment(self, amount_string, description, recipient):
+    def make_payment(self, amount_string, description, recipient, geolocation=None):
         """
         :type amount_string: str
         :type description: str
         :type recipient: str
         """
-
-        endpoint.Payment.create(
-            amount=Amount(amount_string, self._CURRENCY_EURL),
-            counterparty_alias=Pointer(self._POINTER_TYPE_EMAIL, recipient),
-            description=description
-        )
+        if geolocation is None:
+            endpoint.Payment.create(
+                amount=Amount(amount_string, self._CURRENCY_EURL),
+                counterparty_alias=Pointer(self._POINTER_TYPE_EMAIL, recipient),
+                description=description
+            )
+        else:
+            endpoint.Payment.create(
+                amount=Amount(amount_string, self._CURRENCY_EURL),
+                counterparty_alias=Pointer(self._POINTER_TYPE_EMAIL, recipient),
+                description=description,
+                custom_headers={"X-Bunq-Geolocation": geolocation}
+            )
 
     def make_request(self, amount_string, description, recipient):
         """
