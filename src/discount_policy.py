@@ -16,6 +16,9 @@ class UserDiscounts:
     def initialize_policy_file(self):
         dummy_policy_obj = {
             "user": "Jan",
+            "loots": {
+              "number": 0,
+            },
             "discounts": [
                 {
                     "shop": "Starbucks",

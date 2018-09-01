@@ -37,16 +37,24 @@ def get_payments():
     })
 
 
+def get_level(discount):
+    for lvl, range in enumerate(discount['discount_policy']):
+        if range[0] <= discount['current_points'] <= range[1]:
+            return lvl + 1
+
+    return len(discount['discount_policy'])
+
+
 def refresh_database(bunq, user):
     discounts = user['discounts']
     database = DbHelper()
     existing_tx = [tranx[0] for tranx in database.get_payments_from_database()]
 
     #### FIRST TIME DATABASE INITIALIZATION ######
-    # history = bunq.get_all_payment(count=200)
+    history = bunq.get_all_payment(count=200)
     # for h in history:
     #     if h.description.split("-")[0] != "CASHBACK":
-    #         _, dsc = determine_discount(h.description, discounts)
+    #         _, dsc = determine_discount(h.description, user)
     #         database.add_payment_to_database(h.id_, h.description, h.amount.value, dsc*h.amount.value)
     #         existing_tx.append(h.id_)
 
@@ -70,12 +78,18 @@ def refresh_database(bunq, user):
                     for i, discount in enumerate(discounts):
                         print(i, discount)
                         if discount['shop'] == shop:
+                            level_before = get_level(discounts[i])
                             discounts[i]['current_points'] += int(dsc * float(npy.amount.value))
+                            level_after = get_level(discounts[i])
+
+                            if level_before != level_after:
+                                user['loots']['number'] += 1
 
                     socketio.emit('NewPayment', {
                         'shop': {
                             'name': shop,
                             'current_points': discounts[i]['current_points'],
+                            'loots_nuber': user['loots']['number']
                         }
                     })
 
@@ -83,7 +97,6 @@ def refresh_database(bunq, user):
 
 
 def main():
-
     all_option = ShareLib.parse_all_option()
     environment_type = ShareLib.determine_environment_type_from_all_option(
         all_option)
