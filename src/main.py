@@ -88,7 +88,7 @@ def refresh_database(bunq, user):
                     socketio.emit('NewPayment', {
                         'shop': {
                             'name': shop,
-                            'current_points': discounts[i]['current_points'],
+                            'current_points': user['discounts'][i]['current_points'],
                             'loot_number': user['loots']['number']
                         }
                     })
