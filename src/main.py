@@ -5,7 +5,32 @@ from db_helper import DbHelper
 from threading import Thread
 import time
 
-from src.libs.piggybunq_lib import parse_user_discounts, determine_discount
+from libs.piggybunq_lib import parse_user_discounts, determine_discount
+
+
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.route('/hello-world')
+def hello_world():
+    return 'Hello World!'
+
+
+@app.route('/discounts')
+def get_discounts():
+    return jsonify({ 
+        'discounts': parse_user_discounts('data/discount.csv')
+    })
+
+
+@app.route('/payments')
+def get_payments():
+    database = DbHelper()
+    columns = [c[0] for c in database.get_payments_discounts_columns()]
+    return jsonify({
+        'payments': [dict(zip(columns, t)) for t in database.get_payments_from_database()]
+    })
 
 
 def refresh_database(bunq, discounts):
@@ -33,6 +58,9 @@ def refresh_database(bunq, discounts):
 
 
 def main():
+    app.run(debug=True)
+
+
     all_option = ShareLib.parse_all_option()
     environment_type = ShareLib.determine_environment_type_from_all_option(all_option)
 
@@ -49,6 +77,8 @@ def main():
 
 
     Thread(target=refresh_database, args=(bunq, discounts)).start()
+
+    
 
     # all_request = bunq.get_all_request(1)
     # ShareLib.print_all_request(all_request)
