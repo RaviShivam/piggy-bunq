@@ -14,27 +14,73 @@ class UserDiscounts:
             return json.load(file)
 
     def initialize_policy_file(self):
-        dummy_policy_obj = [
-            {
-                "shop": "Starbucks",
-                "discount_policy": [
-                    (0, 100, 0.05),
-                    (101, 200, 0.1),
-                    (201, 300, 0.15)
-                ],
-                "loot_discounts": {
-                    "type": "FIRST_PAYMENT_DISCOUNT",
-                    "value": 0.5
-                },
-                "current_points": 10
-            }
-        ]
+        dummy_policy_obj = {
+            "user": "Jan",
+            "discounts": [
+                {
+                    "shop": "Starbucks",
+                    "discount_policy": [
+                        (0, 100, 0.05),
+                        (101, 200, 0.1),
+                        (201, 300, 0.15)
+                    ],
+                    "loot_discounts": {
+                        "type": "FIRST_PAYMENT_DISCOUNT",
+                        "value": 0.5
+                    },
+                    "basic_discount": {
+                        "value": 0.3,
+                        "valid_from": "02-08-2018",
+                        "valid_to": "18-08-2018"
+                    },
+                    "current_points": 0
+                }, {
+                    "shop": "Kwekkeboom",
+                    "discount_policy": [
+                        (0, 20, 0.05),
+                        (21, 100, 0.1),
+                        (100, 200, 0.15)
+                    ],
+                    "basic_discount": {
+                        "value": 0.28,
+                        "valid_from": "15-08-2018",
+                        "valid_to": "20-08-2018"
+                    },
+                    "current_points": 25
+                }, {
+                    "shop": "Game Mania",
+                    "discount_policy": [
+                        (0, 100, 0.05),
+                        (101, 400, 0.15),
+                        (400, 800, 0.25)
+                    ],
+                    "loot_discounts": {
+                        "type": "FIRST_PAYMENT_DISCOUNT",
+                        "value": 0.25
+                    },
+                    "current_points": 95
+                }, {
+                    "shop": "Oude",
+                    "discount_policy": [
+                        (0, 100, 0.05),
+                        (101, 400, 0.15),
+                        (400, 800, 0.25)
+                    ],
+                    "loot_discounts": {
+                        "type": "FIRST_PAYMENT_DISCOUNT",
+                        "value": 0.25
+                    },
+                    "current_points": 95
+                }
+
+            ]
+        }
 
         with open(self.discount_policy_file, 'w') as outfile:
             json.dump(dummy_policy_obj, outfile)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     user_discounts = UserDiscounts()
     discounts = user_discounts.get_discounts()
     print(discounts)
