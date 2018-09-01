@@ -35,7 +35,6 @@ def determine_discount(description, user):
                 dsc_item = d['loot_discounts'].pop(0)
                 is_valid = currentdate > datetime.strptime(dsc_item['valid_from'], "%d-%m-%Y")
                 if is_valid:
-                    # if dsc_item['type'] == "FIRST_PAYMENT_DISCOUNT":
                     return d['shop'], dsc_item['value']
             else:
                 for r in d['discount_policy']:

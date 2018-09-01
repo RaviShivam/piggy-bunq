@@ -19,55 +19,99 @@ class UserDiscounts:
             "discounts": [
                 {
                     "shop": "Starbucks",
+                    "category": "Coffee",
                     "discount_policy": [
                         (0, 100, 0.05),
                         (101, 200, 0.1),
                         (201, 300, 0.15)
                     ],
                     "loot_discounts": [{
-                        "type": "FIRST_PAYMENT_DISCOUNT",
-                        "value": 0.5,
+                        "type": "FREQUENT BUCKER",
+                        "value": 0.2,
                         "valid_from": "02-08-2018",
-                        "valid_to": "18-08-2018",
+                        "valid_to": "18-09-2018",
                     }],
-                    "current_points": 0
+                    "current_points": 100
                 }, {
                     "shop": "Kwekkeboom",
+                    "category": "Coffee",
                     "discount_policy": [
                         (0, 20, 0.05),
                         (21, 100, 0.1),
                         (100, 200, 0.15),
                     ],
                     "loot_discounts": [],
-                    "current_points": 25
+                    "current_points": 40
                 }, {
                     "shop": "Game Mania",
+                    "category": "Gaming",
                     "discount_policy": [
                         (0, 100, 0.05),
                         (101, 400, 0.15),
                         (400, 800, 0.25)
                     ],
                     "loot_discounts": [{
-                        "type": "FIRST_PAYMENT_DISCOUNT",
+                        "type": "FIRST PAYMENT DISCOUNT",
                         "value": 0.25,
-                        "valid_from": "10-08-2018",
-                        "valid_to": "25-08-2018",
+                        "valid_from": "10-09-2018",
+                        "valid_to": "25-09-2018",
                     }],
-                    "current_points": 95
+                    "current_points": 0
                 }, {
-                    "shop": "Oude",
+                    "shop": "Oude Jan",
+                    "category": "Bar",
                     "discount_policy": [
                         (0, 100, 0.05),
                         (101, 400, 0.15),
                         (400, 800, 0.25)
                     ],
                     "loot_discounts": [{
-                        "type": "DOUBLE_YOUR_POINTS",
-                        "value": 0,
-                        "valid_from": "15-08-2018",
-                        "valid_to": "30-08-2018",
+                        "type": "SPECIAL GOLDEN BIRD",
+                        "value": 0.5,
+                        "valid_from": "15-09-2018",
+                        "valid_to": "30-09-2018",
                     }],
-                    "current_points": 95
+                    "current_points": 100
+                }, {
+                    "shop": "Slijterij Sital",
+                    "category": "Alcohol",
+                    "discount_policy": [
+                        (0, 200, 0.05),
+                        (101, 400, 0.15),
+                        (400, 800, 0.25)
+                    ],
+                    "loot_discounts": [{
+                        "type": "GOLD RARE",
+                        "value": 0.4,
+                        "valid_from": "15-08-2018",
+                        "valid_to": "30-10-2018",
+                    }],
+                    "current_points": 30
+                }, {
+                    "shop": "Spar",
+                    "category": "Grocery",
+                    "discount_policy": [
+                        (0, 200, 0.05),
+                        (101, 400, 0.10),
+                        (400, 800, 0.20)
+                    ],
+                    "loot_discounts": [{
+                        "type": "BUNQ LOOT",
+                        "value": 0.3,
+                        "valid_from": "10-09-2018",
+                        "valid_to": "25-10-2018",
+                    }],
+                    "current_points": 50
+                }, {
+                    "shop": "Jumbo",
+                    "category": "Grocery",
+                    "discount_policy": [
+                        (0, 200, 0.05),
+                        (101, 400, 0.10),
+                        (400, 800, 0.20)
+                    ],
+                    "loot_discounts": [],
+                    "current_points": 75
                 }
 
             ]
