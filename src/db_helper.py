@@ -1,6 +1,7 @@
 import sqlite3
 import os
 
+
 class DbHelper():
     db_file = 'db/database.sqlite'
 
@@ -55,13 +56,19 @@ class DbHelper():
                 query += ", "
 
         query += ") VALUES (" \
-                 "'" + payment_id_ + "' , " \
-                 "'" + payment_description + "' , " \
-                 "'" + payment_amount_currency + "' , " \
-                 "'" + payment_amount_value + "' , " \
-                 "'" + payment_counterparty_alias_label_monetary_account_display_name + "' , " \
-                 "'" + eligable_for_discount + "' , " \
-                 "'" + discount_applied_value + "');"
+                 "'{payment_id_}' , " \
+                 "'{payment_description}' , " \
+                 "'{payment_amount_currency}' , " \
+                 "'{payment_amount_value}' , " \
+                 "'{payment_counterparty_alias_label_monetary_account_display_name}' , " \
+                 "'{eligable_for_discount}' , " \
+                 "'{discount_applied_value}');".format(payment_id_=payment_id_,
+                                                       payment_description=payment_description,
+                                                       payment_amount_currency=payment_amount_currency,
+                                                       payment_amount_value=payment_amount_value,
+                                                       payment_counterparty_alias_label_monetary_account_display_name=payment_counterparty_alias_label_monetary_account_display_name,
+                                                       eligable_for_discount=eligable_for_discount,
+                                                       discount_applied_value=discount_applied_value)
         print("Executing " + query)
 
         self.db.execute(query)
