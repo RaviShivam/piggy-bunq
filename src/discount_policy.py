@@ -24,10 +24,10 @@ class UserDiscounts:
                         (101, 200, 0.1),
                         (201, 300, 0.15)
                     ],
-                    "loot_discounts": {
+                    "loot_discounts": [{
                         "type": "FIRST_PAYMENT_DISCOUNT",
                         "value": 0.5
-                    },
+                    }],
                     "basic_discount": {
                         "value": 0.3,
                         "valid_from": "02-08-2018",
@@ -54,10 +54,10 @@ class UserDiscounts:
                         (101, 400, 0.15),
                         (400, 800, 0.25)
                     ],
-                    "loot_discounts": {
+                    "loot_discounts": [{
                         "type": "FIRST_PAYMENT_DISCOUNT",
                         "value": 0.25
-                    },
+                    }],
                     "current_points": 95
                 }, {
                     "shop": "Oude",
@@ -66,10 +66,10 @@ class UserDiscounts:
                         (101, 400, 0.15),
                         (400, 800, 0.25)
                     ],
-                    "loot_discounts": {
+                    "loot_discounts": [{
                         "type": "FIRST_PAYMENT_DISCOUNT",
                         "value": 0.25
-                    },
+                    }],
                     "current_points": 95
                 }
 
