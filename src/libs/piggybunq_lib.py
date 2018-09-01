@@ -29,9 +29,15 @@ def determine_discount(description, discounts):
     """
     currentdate = datetime.now()
     for d in discounts:
-        # print(d["validFrom"], datetime.strftime(d['validFrom'], "%d-%m-%Y") )
-        if description == d["shop"] and currentdate > datetime.strptime(d['validFrom'], "%d-%m-%Y") and d["count"] > 0:
-            return d['shop'], d['discount']
+        if description == d["shop"] and currentdate > datetime.strptime(d['valid_from'], "%d-%m-%Y") and d["count"] > 0:
+            if d['loot_discount']:
+                dsc_item = d['loot_discount'].pop(0)
+                if dsc_item['type'] == "FIRST_PAYMENT_DISCOUNT":
+                    return d['shop'], dsc_item['value']
+            else:
+                for r in d['discount_policy']:
+                    if r[0] <= d["current_points"] <= r[1]:
+                        return d['shop'], r[2]
     return None, 0
 
 

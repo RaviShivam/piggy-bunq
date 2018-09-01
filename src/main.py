@@ -36,7 +36,9 @@ def get_payments():
 def refresh_database(bunq, discounts):
     database = DbHelper()
     existing_tx = [tranx[0] for tranx in database.get_payments_from_database()]
-    history = bunq.get_all_payment(count=200)
+
+    #### FIRST TIME DATABASE INITIALIZATION ######
+    # history = bunq.get_all_payment(count=200)
     # for h in history:
     #     if h.description.split("-")[0] != "CASHBACK":
     #         _, dsc = determine_discount(h.description, discounts)
@@ -45,15 +47,21 @@ def refresh_database(bunq, discounts):
 
     while True:
         new_payments = bunq.get_all_payment(5)
-        for np in new_payments:
-            if str(np.id_) not in existing_tx and np.description.split("-")[0] != "CASHBACK":
-                shop, dsc = determine_discount(np.description, discounts)
-                database.add_payment_to_database(np.id_, np.description, np.amount.value, dsc*np.amount.value)
-                existing_tx.append(str(np.id_))
+        for npy in new_payments:
+            if str(npy.id_) not in existing_tx and npy.description.split("-")[0] != "CASHBACK":
+                # Check discount eligibility
+                shop, dsc = determine_discount(npy.description, discounts)
+                existing_tx.append(str(npy.id_))
+                # Add new payment to database
+                database.add_payment_to_database(npy.id_, npy.description, npy.amount.value, dsc*npy.amount.value)
+
                 if shop is not None:
+                    # Request cashback from sugar daddy
                     desc = "{}-{}-{}".format("CASHBACK", shop, dsc)
-                    print(desc)
                     bunq.make_request(dsc, desc, "sugardaddy@bunq.com")
+
+                    # Increase the points the shopper has
+                    discounts[shop]['current_points'] += int(dsc * npy.amount.value)
         time.sleep(3)
 
 
