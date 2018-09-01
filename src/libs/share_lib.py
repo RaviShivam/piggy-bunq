@@ -275,6 +275,7 @@ class ShareLib(object):
   │ Amount         │ {payment.amount.currency} {payment.amount.value}
   ├────────────────┼───────────────────────────────────────────────────────
   │ Recipient      │ {payment.counterparty_alias.label_monetary_account.display_name}
+  ├────────────────┼───────────────────────────────────────────────────────
   └────────────────┴───────────────────────────────────────────────────────''')
 
     @classmethod
