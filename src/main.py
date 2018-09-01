@@ -7,19 +7,26 @@ import time
 
 from libs.piggybunq_lib import parse_user_discounts, determine_discount
 
-
 from flask import Flask, jsonify
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
+socketio = SocketIO(app)
+
 
 @app.route('/hello-world')
 def hello_world():
     return 'Hello World!'
 
 
+@socketio.on('my event')
+def handle_my_custom_event(data):
+    emit('my response', data, broadcast=True)
+
+
 @app.route('/discounts')
 def get_discounts():
-    return jsonify({ 
+    return jsonify({
         'discounts': parse_user_discounts('data/discount.csv')
     })
 
@@ -63,11 +70,11 @@ def refresh_database(bunq, discounts):
                     # Increase the points the shopper has
                     discounts[shop]['current_points'] += int(dsc * npy.amount.value)
         time.sleep(3)
+        print("socket emit")
+        socketio.emit('NewPayment', {'number': 10}, namespace='/test')
 
 
 def main():
-    app.run(debug=True)
-
 
     all_option = ShareLib.parse_all_option()
     environment_type = ShareLib.determine_environment_type_from_all_option(all_option)
@@ -82,11 +89,7 @@ def main():
 
     database = DbHelper()
 
-
-
     Thread(target=refresh_database, args=(bunq, discounts)).start()
-
-    
 
     # all_request = bunq.get_all_request(1)
     # ShareLib.print_all_request(all_request)
@@ -100,6 +103,7 @@ def main():
     #
     # bunq.update_context()
 
+    app.run(debug=True)
 
 if __name__ == '__main__':
     main()
